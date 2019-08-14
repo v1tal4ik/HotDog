@@ -1,0 +1,13 @@
+.hot-dog-list {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 85px;
+}
+
+.not-found {
+  position: absolute;
+    top: 50%;
+}

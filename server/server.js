@@ -3,12 +3,13 @@ import path from 'path';
 import router from './routes/index';
 import './models/index';
 
+
 const app = express();
 
 
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '../client/build')))
+app.use(express.static(path.join(__dirname, './build')))
   .use(express.urlencoded({ extended: false }))
   .use(express.text())
   .use(express.json())
@@ -16,7 +17,6 @@ app.use(express.static(path.join(__dirname, '../client/build')))
 
 
 app.use((req, res) => {
-  // res.sendFile(path.join(__dirname + '../client/build/error.html'));
   res.status(404).json({
     err: '404',
     message: '404-not found',
@@ -31,8 +31,5 @@ app.use((err, req, res) => {
 });
 
 app.listen(port, () => {
-//   if (!fs.existsSync('./build/img/cookIcon')) {
-//     fs.mkdirSync('./build/img/HotDogIcon');
-// }
   console.log(`Server running on port : ${port}`);
 });

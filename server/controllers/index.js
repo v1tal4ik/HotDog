@@ -17,16 +17,15 @@ const getHotDogList = async (req, res) => {
 const saveImage = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-    form.uploadDir = path.join(process.cwd(), '../client/public/img/hotDogIcon');
+    form.uploadDir = path.join(process.cwd(), '/build/img/hotDogIcon');
     form.parse(req, (err, fields, files) => {
       if (err) {
         throw new Error('Form parse was failed :(');
       } else {
         const oldPath = files.image.path;
-        const newPath = path.join('../client/public/img/hotDogIcon', files.image.name);
+        const newPath = path.join(process.cwd(), '/build/img/hotDogIcon', files.image.name);
         fs.renameSync(oldPath, newPath);
-        const arrOfPath = newPath.split('\\');
-        const nameOfImg = arrOfPath[arrOfPath.length - 1];
+        const nameOfImg = files.image.name;
         res.send({ nameOfImg });
       }
     });

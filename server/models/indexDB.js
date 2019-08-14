@@ -1,8 +1,8 @@
 import uuidv4 from 'uuid/v4';
 import HotDog from './indexScema';
 
-const getHotDogList = async () => {
-  const doc = await HotDog.find({});
+const getHotDogList = async ({ typeSort }) => {
+  const doc = await HotDog.find({}).sort({ price: (typeSort === 'expensive') ? -1 : 1 });
   if (doc.length) {
     return Promise.resolve(doc);
   }
@@ -16,7 +16,7 @@ const addNewHotDog = async ({ name, price, img }) => {
     id, name, price, img,
   });
   const doc = await obj.save();
-  if (doc.id && name === doc.name) {
+  if (doc.id && doc.name === name) {
     return Promise.resolve({
       status: true,
       message: `The ${name} succesfully added :)`,

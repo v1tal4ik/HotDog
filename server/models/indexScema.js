@@ -13,7 +13,7 @@ const hotDogScema = new Schema({
     required: [true, 'Name is undefined'],
   },
   price: {
-    type: String,
+    type: Number,
     required: [true, 'Price is undefined'],
   },
   img: {

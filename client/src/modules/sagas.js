@@ -12,9 +12,9 @@ function* fetchReducersWatcher() {
 }
 
 
-export function* fetchHotDogListFlow() {
+export function* fetchHotDogListFlow({ payload }) {
   try {
-    const result = yield call(getHotDogList);
+    const result = yield call(getHotDogList, payload);
     yield put(fetchHotDogListSuccess(result));
   } catch (error) {
     yield put(fetchHotDogListFailure(error));

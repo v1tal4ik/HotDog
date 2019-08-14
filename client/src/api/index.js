@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getHotDogList = () => axios.get('/hot-dogs')
+const getHotDogList = ({ typeSort }) => axios.get(`/hot-dogs?typeSort=${typeSort}`)
   .then(({ data }) => data)
   .catch(() => []);
 

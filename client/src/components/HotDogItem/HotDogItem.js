@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import Rodal from 'rodal';
-import { connect } from 'react-redux';
-import { fetchHotDogListRequest } from '../../modules/actions';
 import Modal from '../Modal/Modal';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getTypeSort } from '../../modules/reducers';
+import { fetchHotDogListRequest } from '../../modules/actions';
 import { deleteHotDogById } from '../../api/index';
 import 'rodal/lib/rodal.css';
 import './style.css';
+
 
 
 class HotDogItem extends Component {
@@ -25,17 +28,20 @@ class HotDogItem extends Component {
 
   handleDelete = async ( id ) => {
     const answer = window.confirm('You really want delete this Hot Dog ?')
+    const { fetchHotDogListRequest, typeSort } = this.props;
+
     if ( answer ){
-      const foo = await deleteHotDogById( id );
-      if(foo) {
-        this.props.fetchHotDogListRequest(); 
+      const result = await deleteHotDogById( id );
+      if(result) {
+        await fetchHotDogListRequest({ typeSort });
       }
     }
   }
 
 
-  closeModalAdd = () => {
-    this.props.fetchHotDogListRequest();
+  closeModal = () => {
+    const { fetchHotDogListRequest, typeSort } = this.props;
+    fetchHotDogListRequest({ typeSort });
     this.setState({ visible: false });
   }
 
@@ -55,12 +61,26 @@ class HotDogItem extends Component {
             <img id = 'img' className = 'hot-dog-img' src = {img} alt = {name} />
             <p id = 'price' className = 'hot-dog-price'> {price} $ </p>
         </div>
-        <Rodal visible = { visible } onClose = { this.closeModalAdd } animation = { 'slideDown' }	duration = { 400 } width = { w } height = { h }>
-            <Modal { ...item } close = { this.closeModalAdd } />
+        <Rodal visible = { visible } onClose = { this.closeModal } animation = { 'slideDown' }	duration = { 400 } width = { w } height = { h }>
+            <Modal { ...item } close = { this.closeModal } />
         </Rodal>
       </>
     );
   }
 }
 
-export default connect(null, { fetchHotDogListRequest })(HotDogItem);
+HotDogItem.propTypes = {
+  typeSort: PropTypes.string.isRequired,
+  fetchHotDogListRequest: PropTypes.func.isRequired,
+  el: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    img: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }),
+};
+
+
+export default connect(state => ({
+  typeSort: getTypeSort(state),
+}), { fetchHotDogListRequest })(HotDogItem);

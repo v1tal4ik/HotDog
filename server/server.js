@@ -30,8 +30,5 @@ app.use((err, req, res) => {
 });
 
 app.listen(port, () => {
-  // if (!fs.existsSync('./build/img/cookIcon')) {
-  //     fs.mkdirSync('./build/img/cookIcon');
-  // }
   console.log(`Server running on port : ${port}`);
 });

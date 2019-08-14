@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Rodal from 'rodal';
+import PropTypes from 'prop-types';
 import  { saveImage , addNewHotDog, editHotDogById } from '../../api/index';
 import 'rodal/lib/rodal.css';
 import './style.css';
@@ -14,9 +15,10 @@ const initialState = {
   },
   id: '',
   name: '',
-  price: '',
-  img: '/img/no-photo.png'
+  price: 0,
+  img: '/img/no-photo.png',
 };
+
 
 class Modal extends Component {
   constructor(props) {
@@ -25,38 +27,17 @@ class Modal extends Component {
   }
 
 
-  static getDerivedStateFromProps(props,state) {
-    const { willEdit, id, name, price, img } = props;
-    const { isEdit, edited } = state.change;
-
-
-    if( willEdit && !isEdit && !edited ){
-      return { 
-        ...state,
+  componentWillReceiveProps(nextProps){
+    const { id, name, price, img } = nextProps;
+    if(id && name && price && img){
+      this.setState({
+        ...this.state,
         id,
         name,
         price,
-        img,
-        change: {
-          isEdit: true,
-          edited: false
-        }
-      }
-    };
-
-
-    if( isEdit ){
-      return state;
-    };
-
-
-    return {
-      ...state,
-      change: {
-        isEdit: false,
-        edited: false,
-      }, 
-    };
+        img
+      });
+    }
   }
 
 
@@ -71,8 +52,8 @@ class Modal extends Component {
 
 
   handleSave = async (e) => {
-    const { id, name, price, img } = this.state;
-
+    const { id, name,  img } = this.state;
+    const price = +this.state.price;
     if(name && price){
         e.preventDefault();
         const { status, message } = ( id ) ? await editHotDogById({ id, name, price, img }) : await addNewHotDog({ name, price, img });
@@ -84,16 +65,17 @@ class Modal extends Component {
   closeModalMessage = () => {
     const { status } = this.state;
     const { close } = this.props;
-    if (status) {
+    if (!status) {
       this.setState({
-        ...initialState, change: { isEdit: false, edited: true },
+        visible: false, 
+        message: '', 
+        status: false,
       });
-      if( close ){ close() };
     } else {
-      this.setState({
-        ...this.state, visible: false, message: '', status: false,
-      });
+      if(close) { close() } 
+      this.setState(initialState);
     }
+
   };
     
 
@@ -126,5 +108,11 @@ class Modal extends Component {
     )
   }
 }
+
+
+Modal.propTypes = {
+  close: PropTypes.func,
+}
+
 
 export default Modal;

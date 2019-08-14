@@ -5,8 +5,9 @@ import db from '../models/indexDB';
 
 
 const getHotDogList = async (req, res) => {
+  const { typeSort } = req.query;
   try {
-    const response = await db.getHotDogList();
+    const response = await db.getHotDogList({ typeSort });
     res.status(200).json(response);
   } catch ({ message }) {
     res.status(404).json(message);
@@ -16,9 +17,7 @@ const getHotDogList = async (req, res) => {
 const saveImage = async (req, res) => {
   try {
     const form = new formidable.IncomingForm();
-
     form.uploadDir = path.join(process.cwd(), '../client/public/img/hotDogIcon');
-
     form.parse(req, (err, fields, files) => {
       if (err) {
         throw new Error('Form parse was failed :(');

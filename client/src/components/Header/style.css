@@ -12,6 +12,7 @@ header {
   0px 2px 4px -1px rgba(0,0,0,0.2), 
   0px 4px 5px 0px rgba(0,0,0,0.14), 
   0px 1px 10px 0px rgba(0,0,0,0.1) inset;
+  z-index: 9;
 }
 
 .header-inp {
@@ -44,4 +45,12 @@ header {
 .sort-block-text {
   margin-right: 10px;
   text-transform: uppercase;
+}
+
+/* MEDIA QUERY */
+
+@media screen and (max-width: 600px){
+  .cook-list{
+      padding-top: 150px;
+  }
 }

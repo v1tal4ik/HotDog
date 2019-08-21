@@ -9,13 +9,9 @@ const initialState = {
   visible: false,
   message: '',
   status: false,
-  change: {
-    isEdit: false,
-    edited: false,
-  },
   id: '',
   name: '',
-  price: 0,
+  price: '',
   img: '/img/no-photo.png',
 };
 
@@ -27,7 +23,7 @@ class Modal extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     const { id, name, price, img } = nextProps;
     if(id && name && price && img){
       this.setState({
@@ -41,8 +37,19 @@ class Modal extends Component {
   }
 
 
-  changeInput = (e) => this.setState({[e.target.name]:e.target.value});
-
+  changeInput = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'price':
+        if (value > 0 || value === '') {
+          this.setState({ [name]: value });
+        }
+        break;
+      default:
+        this.setState({ [name]: value });
+    }
+  };
+  
 
   changeInputImage = async (e) => {
     const img = e.target.files[0];
@@ -52,10 +59,11 @@ class Modal extends Component {
 
 
   handleSave = async (e) => {
-    const { id, name,  img } = this.state;
+    const { id, img } = this.state;
+    const name = this.state.name.toLocaleUpperCase();
     const price = +this.state.price;
-    if(name && price){
-        e.preventDefault();
+    if (name && price) {
+      e.preventDefault();
         const { status, message } = ( id ) ? await editHotDogById({ id, name, price, img }) : await addNewHotDog({ name, price, img });
         this.setState({ visible: true, message, status });
     }
@@ -72,7 +80,7 @@ class Modal extends Component {
         status: false,
       });
     } else {
-      if(close) { close() } 
+      if (close) { close() } 
       this.setState(initialState);
     }
 

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import Preloader from '../Preloader';
 import HotDogItem from '../HotDogItem';
 import { fetchHotDogListRequest } from '../../modules/actions';
-import { getHotDogList, getLoading, getTypeSort } from '../../modules/reducers';
+import {
+  getHotDogList, getLoading, getTypeSort, getInputValue,
+} from '../../modules/reducers';
 import './style.css';
 
 
@@ -19,7 +21,7 @@ class HotDogList extends Component {
 
 
   render() {
-    const { hotDogList, isLoading } = this.props;
+    const { hotDogList, isLoading, inputValue } = this.props;
     if (isLoading) {
       return <div className='hot-dog-list'>
                 <Preloader />
@@ -30,7 +32,7 @@ class HotDogList extends Component {
       return <div className='hot-dog-list'>
               {
                 hotDogList.map(el => (
-                  <HotDogItem key = { el.id } el = { el } />
+                  el.name.includes(inputValue) ? <HotDogItem key = { el.id } el = { el } /> : null
                 ))
               }
             </div>;
@@ -45,6 +47,7 @@ class HotDogList extends Component {
 HotDogList.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   typeSort: PropTypes.string.isRequired,
+  inputValue: PropTypes.string.isRequired,
   fetchHotDogListRequest: PropTypes.func.isRequired,
   hotDogList: PropTypes.array.isRequired,
 };
@@ -53,4 +56,5 @@ export default connect(state => ({
   hotDogList: getHotDogList(state),
   isLoading: getLoading(state),
   typeSort: getTypeSort(state),
+  inputValue: getInputValue(state),
 }), { fetchHotDogListRequest })(HotDogList);

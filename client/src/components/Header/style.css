@@ -23,7 +23,13 @@ header {
   outline: none;
 }
 
+.clear {
+  left: 60% !important;
+}
 
+.hide {
+  display: none;
+}
 
 .header-btn {
   padding: 7px 15px;
